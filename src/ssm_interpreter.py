@@ -1,6 +1,6 @@
 import re
 import sys
-token = {'ildec', 'iadd', 'isub', 'imul', 'idiv', 'imod', 'pop', 'dup', 'swap', 'jz', 'jnz', 'jmp', 'load', 'store'}
+token = {'ildc', 'iadd', 'isub', 'imul', 'idiv', 'imod', 'pop', 'dup', 'swap', 'jz', 'jnz', 'jmp', 'load', 'store'}
 path =  sys.argv[1]
 stack = []
 numberPattern = r'^[-]?[0-9]+((\.?[0-9]+)?)$'
