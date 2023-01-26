@@ -1,3 +1,5 @@
+#note need change all print error msg below into an throw for error handling later on
+
 import re
 import sys
 from itertools import tee
@@ -124,61 +126,90 @@ try:
     with open(path, 'r') as file:
         line_num = 0
         file_iter = iter(file)
+        numberOperand = False
+        labelOperand = False
+        labelBoolean = False
         while file_iter:
             try:
-                line = line.split(next(file_iter)) 
-                if len(line) > 3 :
-                    print("Incorrect format at line " + line_num)
-                elif line[0] in token:
-                    if line[0] == "ildc":
-                        number = int(line[1])
-                        ssm.Ildc(number)
-                    elif line[0] == "iadd":
-                        ssm.Iadd()
+                line = line.split(next(file_iter))
+                checker = 0
+                for instruction in line:
+                    if checker == 0:
+                        if (numberOperand == True or labelOperand == True):
+                                print("Operand required")
+                                break
+                        if re.search(r'.+:$', instruction):
+                            ssm.addLabel(instruction, line_num)
+                        checker +=1
+                    if instruction in token:
+                        if (numberOperand == True or labelOperand == True):
+                                print("Operand required")
+                                break
+                        if instruction == "ildc":
+                            numberOperand = True
+                            if (re.match(numberPattern)):
+                                number = int(line[1])
+                                ssm.Ildc(number)
+                            else:
+                                print("invalid operand")
+                        elif instruction == "iadd":
+                            ssm.Iadd()
 
-                    elif line[0] == "isub":
-                        ssm.Isub()
+                        elif instruction == "isub":
+                            ssm.Isub()
 
-                    elif line[0] == "imul":
-                        ssm.Imul()
+                        elif instruction == "imul":
+                            ssm.Imul()
 
-                    elif line[0] == "idiv":
-                        ssm.Idiv()
+                        elif instruction == "idiv":
+                            ssm.Idiv()
 
-                    elif line[0] == "imod":
-                        ssm.Imod()
+                        elif instruction == "imod":
+                            ssm.Imod()
 
-                    elif line[0] == "pop":
-                        ssm.Pop()
+                        elif instruction == "pop":
+                            ssm.Pop()
 
-                    elif line[0] == "dup":
-                        ssm.Dup()
+                        elif instruction == "dup":
+                            ssm.Dup()
 
-                    elif line[0] == "swap":
-                        ssm.Swap()
+                        elif instruction == "swap":
+                            ssm.Swap()
 
-                    elif line[0] == "jz":
-                        if ssm.Jz() == 0:
-                            file_iter = ssm.Jmp(line[1])
+                        elif instruction == "jz":
+                            labelOperand = True
+                            if ssm.Jz() == 0:
+                                labelBoolean = True
+                        elif instruction == "jnz":
+                            labelOperand = True
+                            if ssm.Jnz() != 0:
+                                labelBoolean = True
 
-                        
-                    elif line[0] == "jnz":
-                        if ssm.Jnz() != 0:
-                            file_iter = ssm.Jmp(line[1])
+                        elif instruction == "jmp":
+                            labelOperand = True
 
-                    elif line[0] == "jmp":
-                        file_iter = ssm.Jmp(line[1])
+                        elif instruction == "load":
+                            ssm.Load()
 
-                    elif line[0] == "load":
-                        ssm.Load()
-
-                    elif line[0] == "store":
-                        ssm.Store()
-                else:
-                    if re.search(r'.+:$', line[0]):
-                        ssm.addLabel(line[0], line_num)
+                        elif instruction == "store":
+                            ssm.Store()
                     else:
-                        print("invalid instruction")
+                        if numberOperand:
+                            if (re.match(numberPattern)):
+                                number = int(line[1])
+                                ssm.Ildc(number)
+                                numberOperand = False
+                            else:
+                                # this line below  need change to throw if not it going give expected output
+                                print("invalid operand")
+                                break
+                        elif labelOperand:
+                            if labelBoolean:
+                                ssm.Jmp(instruction)
+                                labelBoolean = False
+                            labelOperand = False
+                        else:
+                            print("invalid instruction")
                 line_num += 1
             except:
                 break
