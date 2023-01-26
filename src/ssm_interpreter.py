@@ -1,11 +1,16 @@
-#note need change all print error msg below into an throw for error handling later on
+# Jason Zhang
+# Daniel Kogan 114439349
+# note need change all print error msg below into an throw for error handling later on
 
 import re
 import sys
 from itertools import tee
-token = {'ildc', 'iadd', 'isub', 'imul', 'idiv', 'imod', 'pop', 'dup', 'swap', 'jz', 'jnz', 'jmp', 'load', 'store'}
-path =  sys.argv[1]
+token = {'ildc', 'iadd', 'isub', 'imul', 'idiv', 'imod',
+         'pop', 'dup', 'swap', 'jz', 'jnz', 'jmp', 'load', 'store'}
+path = sys.argv[1]
 numberPattern = r'^[-]?[0-9]+((\.?[0-9]+)?)$'
+
+
 class Ssm:
     def __init__(self):
         self.stack = []
@@ -94,7 +99,8 @@ class Ssm:
             secondNumber = self.stack.pop()
             self.storageCell[secondNumber] = firstNumber
         except:
-            print("Unable perform store operation as there not enough numbers in the stack")
+            print(
+                "Unable perform store operation as there not enough numbers in the stack")
 
     def Load(self):
         try:
@@ -102,6 +108,7 @@ class Ssm:
             self.stack.append(self.storageCell[cell])
         except:
             print("Unable perform load operation as stack is empty")
+
     def Jmp(self, label):
         if not label in self.label:
             print("Label does not exist")
@@ -119,10 +126,26 @@ class Ssm:
 
     def addLabel(self, label, lineNumber):
         self.label[label] = lineNumber
-    
+
+    def processInstruction(instruction):
+        return self.instruction_dict[instruction]()
+
+    instruction_dict = {
+        "iadd": Iadd,
+        "isub": Isub,
+        "imul": Imul,
+        "idiv": Idiv,
+        "imod": Imod,
+        "pop": Pop,
+        "dup": Dup,
+        "swap": Swap,
+        "load": Load,
+        "store": Store,
+    }
+
 
 ssm = Ssm()
-try: 
+try:
     with open(path, 'r') as file:
         line_num = 0
         file_iter = iter(file)
@@ -131,20 +154,22 @@ try:
         labelBoolean = False
         while file_iter:
             try:
+              # name line is not defined
                 line = line.split(next(file_iter))
                 checker = 0
                 for instruction in line:
+                  # error out is caused somewhere here
                     if checker == 0:
                         if (numberOperand == True or labelOperand == True):
-                                print("Operand required")
-                                break
+                            print("Operand required")
+                            break
                         if re.search(r'.+:$', instruction):
                             ssm.addLabel(instruction, line_num)
-                        checker +=1
+                        checker += 1
                     if instruction in token:
                         if (numberOperand == True or labelOperand == True):
-                                print("Operand required")
-                                break
+                            print("Operand required")
+                            break
                         if instruction == "ildc":
                             numberOperand = True
                             if (re.match(numberPattern)):
@@ -152,30 +177,8 @@ try:
                                 ssm.Ildc(number)
                             else:
                                 print("invalid operand")
-                        elif instruction == "iadd":
-                            ssm.Iadd()
-
-                        elif instruction == "isub":
-                            ssm.Isub()
-
-                        elif instruction == "imul":
-                            ssm.Imul()
-
-                        elif instruction == "idiv":
-                            ssm.Idiv()
-
-                        elif instruction == "imod":
-                            ssm.Imod()
-
-                        elif instruction == "pop":
-                            ssm.Pop()
-
-                        elif instruction == "dup":
-                            ssm.Dup()
-
-                        elif instruction == "swap":
-                            ssm.Swap()
-
+                        
+                        # Jumping Instructions
                         elif instruction == "jz":
                             labelOperand = True
                             if ssm.Jz() == 0:
@@ -184,15 +187,12 @@ try:
                             labelOperand = True
                             if ssm.Jnz() != 0:
                                 labelBoolean = True
-
                         elif instruction == "jmp":
                             labelOperand = True
-
-                        elif instruction == "load":
-                            ssm.Load()
-
-                        elif instruction == "store":
-                            ssm.Store()
+                        
+                        # Regular Instructions
+                        elif instruction in ssm.instruction_dict:
+                            ssm.processInstruction(instruction)
                     else:
                         if numberOperand:
                             if (re.match(numberPattern)):
@@ -211,12 +211,10 @@ try:
                         else:
                             print("invalid instruction")
                 line_num += 1
-            except:
+                print(ssm.stack[-1])
+            except Exception as e:
+                print(e)
                 break
-    print(ssm.stack[-1])
 
 except FileNotFoundError:
     print("File is not found")
-
-
-
