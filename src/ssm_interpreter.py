@@ -165,7 +165,7 @@ try:
                             break
                         if instruction == "ildc":
                             numberOperand = True
-                            if (not re.match(numberPattern, line[checker])):
+                            if (not re.match(numberPattern, line[checker+1])):
                                 # if operand is invalid, exit
                                 print("invalid operand") # should be throw
                         # Jumping Instructions
