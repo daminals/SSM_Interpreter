@@ -1,5 +1,10 @@
 ildc 10
 ildc 20
 iadd
-label1: ildc 25
+ildc 25
+ildc 15
+ildc 15
+label1: ildc 15
 isub
+jz label1
+ildc 60

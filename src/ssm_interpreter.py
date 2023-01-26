@@ -95,13 +95,13 @@ class Ssm:
 
     def Jz(self):
         try:
-            return self.stack.pop()
+            return self.stack.pop() == 0
         except:
             print("unable perform jz operation as stack is empty")
 
     def Jnz(self):
         try:
-            return self.stack.pop()
+            return self.stack.pop() != 0
         except:
             print("unable perform jz operation as stack is empty")
 
@@ -121,11 +121,10 @@ class Ssm:
         except:
             print("Unable perform load operation as stack is empty")
 
-    def Jmp(self, label, current_lineNumber):
+    def Jmp(self, label):
         if not label in self.label:
             print("Label does not exist")
         else:
-            current_lineNumber = self.label[label]
             return self.label[label]
 
     def addLabel(self, label, lineNumber):
@@ -144,7 +143,7 @@ try:
         labelOperand = False
         labelBoolean = False
         while line_num != len(file_list):  # go until program completion
-            try:
+            # try:
                 line = file_list[line_num].strip().split(' ')
                 # print(line)
                 checker = -1
@@ -157,7 +156,7 @@ try:
                             break
                         if re.search(r'.+:$', instruction):
                             # print("Detected Label")
-                            ssm.addLabel(instruction, line_num)
+                            ssm.addLabel(instruction[:-1], line_num)
                             continue
                     if instruction in token:
                         if (numberOperand == True or labelOperand == True):
@@ -171,14 +170,13 @@ try:
                         # Jumping Instructions
                         elif instruction == "jz":
                             labelOperand = True
-                            if ssm.Jz() == 0:
-                                labelBoolean = True
+                            labelBoolean = ssm.Jz()
                         elif instruction == "jnz":
                             labelOperand = True
-                            if ssm.Jnz() != 0:
-                                labelBoolean = True
+                            labelBoolean = ssm.Jnz()
                         elif instruction == "jmp":
                             labelOperand = True
+                            labelBoolean = True # we want it to jump no matter what if jmp
 
                         # Regular Instructions
                         elif instruction in ssm.instruction_dict:
@@ -195,15 +193,15 @@ try:
                                 break
                         elif labelOperand:
                             if labelBoolean:
-                                ssm.Jmp(instruction)
+                                line_num = ssm.Jmp(instruction)
                                 labelBoolean = False
                             labelOperand = False
                         else:
                             print("invalid instruction")
                 line_num += 1
                 print(ssm.stack[-1])
-            except Exception as e:
-                print(e)
-                break
+            # except Exception as e:
+            #     print(e)
+            #     break
 except FileNotFoundError:
     print("File is not found")
