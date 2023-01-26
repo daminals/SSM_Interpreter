@@ -8,6 +8,7 @@ class Ssm:
     def __init__(self):
         self.stack = []
         self.storageCell = {}
+        self.label = {}
 
     def Ildc(self, number):
         self.stack.append(number)
@@ -99,6 +100,15 @@ class Ssm:
             self.stack.append(self.storageCell[cell])
         except:
             print("Unable perform load operation as stack is empty")
+    def Jmp(self, label):
+        if not label in self.label:
+            print("Label does not exist")
+        else:
+            return self.label[label]
+
+    def addLabel(self, label, lineNumber):
+        self.label[label] = lineNumber
+    
 
 ssm = Ssm();
 try: 
@@ -109,9 +119,52 @@ try:
             if len(line) > 3 :
                 print("Incorrect format at line " + line_num)
             elif line[0] in token:
-                print(line)
+                if line[0] == "ildc":
+                    number = int(line[1])
+                    ssm.Ildc(number)
+                elif line[0] == "iadd":
+                    ssm.Iadd()
+
+                elif line[0] == "isub":
+                    ssm.Isub()
+
+                elif line[0] == "imul":
+                    ssm.Imul()
+
+                elif line[0] == "idiv":
+                    ssm.Idiv()
+
+                elif line[0] == "imod":
+                    ssm.Imod()
+
+                elif line[0] == "pop":
+                    ssm.Pop()
+
+                elif line[0] == "dup":
+                    ssm.Dup()
+
+                elif line[0] == "swap":
+                    ssm.Swap()
+
+                elif line[0] == "jz":
+                    ssm.Jz()
+                    
+                elif line[0] == "jnz":
+                    ssm.Jnz()
+
+                elif line[0] == "jmp":
+                    ssm.Jmp()
+
+                elif line[0] == "load":
+                    ssm.Load()
+
+                elif line[0] == "store":
+                    ssm.Store()
             else:
-                print(line)
+                if re.search(r'.+:$', line[0]):
+                    ssm.addLabel(line[0], line_num)
+                else:
+                    print("invalid instruction")
 
 except FileNotFoundError:
     print("File is not found")
