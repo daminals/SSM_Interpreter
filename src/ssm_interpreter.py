@@ -146,17 +146,17 @@ try:
         while line_num != len(file_list):  # go until program completion
             try:
                 line = file_list[line_num].strip().split(' ')
-                print(line)
+                # print(line)
                 checker = -1
                 for instruction in line:
                     checker += 1
-                    print(instruction+ ":",checker)
+                    # print(instruction+ ":",checker)
                     if checker == 0: # first instruction
                         if (numberOperand == True or labelOperand == True):
                             print("Operand required")
                             break
                         if re.search(r'.+:$', instruction):
-                            print("Detected Label")
+                            # print("Detected Label")
                             ssm.addLabel(instruction, line_num)
                             continue
                     if instruction in token:
@@ -185,8 +185,8 @@ try:
                             ssm.processInstruction(instruction)
                     else:
                         if numberOperand:
-                            if (re.match(numberPattern, line[1])):
-                                number = int(line[1])
+                            if (re.match(numberPattern, line[checker])):
+                                number = int(line[checker])
                                 ssm.Ildc(number)
                                 numberOperand = False
                             else:
