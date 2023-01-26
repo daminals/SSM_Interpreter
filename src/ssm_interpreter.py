@@ -137,11 +137,19 @@ class Ssm:
 ssm = Ssm()
 try:
     with open(path, 'r') as file:
-        line_num = 0
         file_list = list(file)
         numberOperand = False
         labelOperand = False
         labelBoolean = False
+        # go through and add all labels in program
+        for line_num in range(len(file_list)):
+          line = file_list[line_num].strip().split(' ')
+          for instruction in line:
+              if re.search(r'.+:$', instruction):
+                # print("Detected Label")
+                ssm.addLabel(instruction[:-1], line_num)
+        # interpret asm
+        line_num = 0
         while line_num != len(file_list):  # go until program completion
             try:
                 line = file_list[line_num].strip().split(' ')
@@ -155,8 +163,8 @@ try:
                             print("Operand required")
                             break
                         if re.search(r'.+:$', instruction):
-                            # print("Detected Label")
-                            ssm.addLabel(instruction[:-1], line_num)
+                            # ssm.addLabel(instruction[:-1], line_num)
+                            # ignore label declaration and skip (labels already catelogued)
                             continue
                     if instruction in token:
                         if (numberOperand == True or labelOperand == True):
