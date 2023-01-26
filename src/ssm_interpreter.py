@@ -143,7 +143,7 @@ try:
         labelOperand = False
         labelBoolean = False
         while line_num != len(file_list):  # go until program completion
-            # try:
+            try:
                 line = file_list[line_num].strip().split(' ')
                 # print(line)
                 checker = -1
@@ -200,8 +200,8 @@ try:
                             print("invalid instruction")
                 line_num += 1
                 print(ssm.stack[-1])
-            # except Exception as e:
-            #     print(e)
-            #     break
+            except Exception as e:
+                print(e)
+                break
 except FileNotFoundError:
     print("File is not found")
