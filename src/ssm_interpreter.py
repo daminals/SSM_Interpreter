@@ -110,61 +110,67 @@ class Ssm:
         self.label[label] = lineNumber
     
 
-ssm = Ssm();
+ssm = Ssm()
 try: 
     with open(path, 'r') as file:
+        line_num = 0
         file_iter = iter(file)
-        for line_num, line in enumerate(file_iter):
-            line = line.split() 
-            if len(line) > 3 :
-                print("Incorrect format at line " + line_num)
-            elif line[0] in token:
-                if line[0] == "ildc":
-                    number = int(line[1])
-                    ssm.Ildc(number)
-                elif line[0] == "iadd":
-                    ssm.Iadd()
+        while file_iter:
+            try:
+                line = line.split(next(file_iter)) 
+                if len(line) > 3 :
+                    print("Incorrect format at line " + line_num)
+                elif line[0] in token:
+                    if line[0] == "ildc":
+                        number = int(line[1])
+                        ssm.Ildc(number)
+                    elif line[0] == "iadd":
+                        ssm.Iadd()
 
-                elif line[0] == "isub":
-                    ssm.Isub()
+                    elif line[0] == "isub":
+                        ssm.Isub()
 
-                elif line[0] == "imul":
-                    ssm.Imul()
+                    elif line[0] == "imul":
+                        ssm.Imul()
 
-                elif line[0] == "idiv":
-                    ssm.Idiv()
+                    elif line[0] == "idiv":
+                        ssm.Idiv()
 
-                elif line[0] == "imod":
-                    ssm.Imod()
+                    elif line[0] == "imod":
+                        ssm.Imod()
 
-                elif line[0] == "pop":
-                    ssm.Pop()
+                    elif line[0] == "pop":
+                        ssm.Pop()
 
-                elif line[0] == "dup":
-                    ssm.Dup()
+                    elif line[0] == "dup":
+                        ssm.Dup()
 
-                elif line[0] == "swap":
-                    ssm.Swap()
+                    elif line[0] == "swap":
+                        ssm.Swap()
 
-                elif line[0] == "jz":
-                    ssm.Jz()
-                    
-                elif line[0] == "jnz":
-                    ssm.Jnz()
+                    elif line[0] == "jz":
+                        ssm.Jz()
+                        
+                    elif line[0] == "jnz":
+                        ssm.Jnz()
 
-                elif line[0] == "jmp":
-                    ssm.Jmp()
+                    elif line[0] == "jmp":
+                        ssm.Jmp()
 
-                elif line[0] == "load":
-                    ssm.Load()
+                    elif line[0] == "load":
+                        ssm.Load()
 
-                elif line[0] == "store":
-                    ssm.Store()
-            else:
-                if re.search(r'.+:$', line[0]):
-                    ssm.addLabel(line[0], line_num)
+                    elif line[0] == "store":
+                        ssm.Store()
                 else:
-                    print("invalid instruction")
+                    if re.search(r'.+:$', line[0]):
+                        ssm.addLabel(line[0], line_num)
+                    else:
+                        print("invalid instruction")
+                line_num += 1
+            except:
+                break
+    print(ssm.stack[-1])
 
 except FileNotFoundError:
     print("File is not found")
