@@ -104,7 +104,16 @@ class Ssm:
         if not label in self.label:
             print("Label does not exist")
         else:
-            return self.label[label]
+            with open(path, 'r') as file:
+                targetline = self.label[label]
+                counter = 0
+                file_iter = iter(file)
+                while file_iter:
+                    if counter == targetline:
+                        break
+                    next(file_iter)
+
+            return file_iter
 
     def addLabel(self, label, lineNumber):
         self.label[label] = lineNumber
@@ -149,13 +158,16 @@ try:
                         ssm.Swap()
 
                     elif line[0] == "jz":
-                        ssm.Jz()
+                        if ssm.Jz() == 0:
+                            file_iter = ssm.Jmp(line[1])
+
                         
                     elif line[0] == "jnz":
-                        ssm.Jnz()
+                        if ssm.Jnz() != 0:
+                            file_iter = ssm.Jmp(line[1])
 
                     elif line[0] == "jmp":
-                        ssm.Jmp()
+                        file_iter = ssm.Jmp(line[1])
 
                     elif line[0] == "load":
                         ssm.Load()
