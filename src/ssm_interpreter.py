@@ -140,6 +140,14 @@ class Ssm:
 
 ssm = Ssm()
 try:
+    #scanning for label
+    with open(path, 'r') as file:
+        file = list(file)
+        for i in range(len(file)):
+            line = file[i].split()
+            if re.match(r'.+:$', line[0]):
+                # print("Detected Label")
+                ssm.addLabel(line[0].replace(':', ''), i)
     with open(path, 'r') as file:
         file_list = list(file)
         numberOperand = False
@@ -162,14 +170,10 @@ try:
                 for instruction in line:
                     checker += 1
                     # print(instruction+ ":",checker)
-                    if checker == 0: # first instruction
+                    if checker == 0 and re.search(r'.+:$', instruction): # first instruction
                         if (numberOperand == True or labelOperand == True):
                             print("Operand required")
                             break
-                        if re.search(r'.+:$', instruction):
-                            # ssm.addLabel(instruction[:-1], line_num)
-                            # ignore label declaration and skip (labels already catelogued)
-                            continue
                     if instruction in token:
                         if (numberOperand == True or labelOperand == True):
                             print("Operand required")
