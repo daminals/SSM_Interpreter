@@ -182,7 +182,7 @@ try:
                             numberOperand = True
                             if (not re.match(numberPattern, line[checker+1])):
                                 # if operand is invalid, exit
-                                print("invalid operand") # should be throw
+                                print("invalid operand") # TODO: should be throw
                         # Jumping Instructions
                         elif instruction == "jz":
                             labelOperand = True
@@ -193,7 +193,6 @@ try:
                         elif instruction == "jmp":
                             labelOperand = True
                             labelBoolean = True # we want it to jump no matter what if jmp
-
                         # Regular Instructions
                         elif instruction in ssm.instruction_dict:
                             ssm.processInstruction(instruction)
