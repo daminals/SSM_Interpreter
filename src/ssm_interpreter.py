@@ -41,7 +41,7 @@ class Ssm:
             secondNumber = self.stack.pop()
             self.stack.append(firstNumber + secondNumber)
         except:
-            print("Unable perform add operation as missing an operand")
+            raise ArithmeticError
 
     def Isub(self):
         try:
@@ -49,7 +49,7 @@ class Ssm:
             secondNumber = self.stack.pop()
             self.stack.append(secondNumber - firstNumber)
         except:
-            print("Unable perform sub operation as missing an operand")
+            raise ArithmeticError
 
     def Imul(self):
         try:
@@ -57,7 +57,7 @@ class Ssm:
             secondNumber = self.stack.pop()
             self.stack.append(secondNumber * firstNumber)
         except:
-            print("Unable perform mul operation as missing an operand")
+            raise ArithmeticError
 
     def Idiv(self):
         try:
@@ -65,7 +65,7 @@ class Ssm:
             secondNumber = self.stack.pop()
             self.stack.append(secondNumber / firstNumber)
         except:
-            print("Unable perform div operation as missing an operand")
+            raise ArithmeticError
 
     def Imod(self):
         try:
@@ -73,19 +73,19 @@ class Ssm:
             secondNumber = self.stack.pop()
             self.stack.append(secondNumber % firstNumber)
         except:
-            print("Unable perform mod operation as missing an operand")
+            raise ArithmeticError
 
     def Pop(self):
         try:
             self.stack.pop()
         except:
-            print("Unable perform pop operation as stack is empty")
+            raise LookupError
 
     def Dup(self):
         try:
             self.stack.append(self.stack[-1])
         except:
-            print("Unable perform dup operation as stack is empty")
+            raise LookupError
 
     def Swap(self):
         try:
@@ -94,19 +94,19 @@ class Ssm:
             self.stack.append(firstNumber)
             self.stack.append(secondNumber)
         except:
-            print("Unable perform swap operation")
+            raise ArithmeticError
 
     def Jz(self):
         try:
             return self.stack.pop() == 0
         except:
-            print("unable perform jz operation as stack is empty")
+            raise LookupError
 
     def Jnz(self):
         try:
             return self.stack.pop() != 0
         except:
-            print("unable perform jz operation as stack is empty")
+            raise LookupError
 
     def Store(self):
         try:
@@ -114,19 +114,18 @@ class Ssm:
             secondNumber = self.stack.pop()
             self.storageCell[secondNumber] = firstNumber
         except:
-            print(
-                "Unable perform store operation as there not enough numbers in the stack")
+            raise ArithmeticError
 
     def Load(self):
         try:
             cell = self.stack.pop()
             self.stack.append(self.storageCell[cell])
         except:
-            print("Unable perform load operation as stack is empty")
+            raise ArithmeticError
 
     def Jmp(self, label):
         if not label in self.label:
-            print("Label does not exist")
+            raise LookupError
         else:
             return self.label[label]
 
@@ -222,3 +221,7 @@ except FileNotFoundError:
     print("File is not found")
 except ValueError:
     print("Syntax Error Occured")
+except LookupError:
+    print("Stack is empty or the label dosent exist")
+except ArithmeticError:
+    print("Not enough values in the stack to perform the operation")
