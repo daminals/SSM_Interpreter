@@ -174,14 +174,17 @@ try:
                 # print(instruction+ ":",checker)
                 if checker == 0 and re.search(r'.+:$', instruction): # first instruction
                     if (numberOperand == True or labelOperand == True):
+                        print("1")
                         raise ValueError
-                if instruction in token:
+                elif instruction in token:
                     if (numberOperand == True or labelOperand == True):
+                        print("2")
                         raise ValueError
                     if instruction == "ildc":
                         numberOperand = True
                         if (not re.match(numberPattern, line[checker+1])):
                             # if operand is invalid, exit
+                            print("3")
                             raise ValueError  # should be throw
                     # Jumping Instructions
                     elif instruction == "jz":
@@ -203,6 +206,7 @@ try:
                             ssm.Ildc(number)
                             numberOperand = False
                         else:
+                            print("4")
                             raise ValueError
                     elif labelOperand:
                         if labelBoolean:
@@ -210,6 +214,7 @@ try:
                             labelBoolean = False
                         labelOperand = False
                     else:
+                        print("damn")
                         raise ValueError
             line_num += 1
         print(ssm.stack)
