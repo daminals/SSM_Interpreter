@@ -4,7 +4,6 @@
 
 import re
 import sys
-from itertools import tee
 token = {'ildc', 'iadd', 'isub', 'imul', 'idiv', 'imod',
          'pop', 'dup', 'swap', 'jz', 'jnz', 'jmp', 'load', 'store'}
 path = sys.argv[1]
@@ -165,20 +164,20 @@ try:
                 checker = -1
                 for instruction in line:
                     checker += 1
+                    if instruction == "#":
+                        break
                     # print(instruction+ ":",checker)
                     if checker == 0 and re.search(r'.+:$', instruction): # first instruction
                         if (numberOperand == True or labelOperand == True):
-                            print("Operand required")
-                            break
+                            raise ValueError
                     if instruction in token:
                         if (numberOperand == True or labelOperand == True):
-                            print("Operand required")
-                            break
+                            raise ValueError
                         if instruction == "ildc":
                             numberOperand = True
                             if (not re.match(numberPattern, line[checker+1])):
                                 # if operand is invalid, exit
-                                print("invalid operand") # should be throw
+                                raise ValueError  # should be throw
                         # Jumping Instructions
                         elif instruction == "jz":
                             labelOperand = True
@@ -200,16 +199,14 @@ try:
                                 ssm.Ildc(number)
                                 numberOperand = False
                             else:
-                                # this line below  need change to throw if not it going give expected output
-                                print("invalid operand")
-                                break
+                                raise ValueError
                         elif labelOperand:
                             if labelBoolean:
                                 line_num = ssm.Jmp(instruction)
                                 labelBoolean = False
                             labelOperand = False
                         else:
-                            print("invalid instruction")
+                            raise ValueError
                 line_num += 1
                 print(ssm.stack[-1])
             except Exception as e:
@@ -217,3 +214,5 @@ try:
                 break
 except FileNotFoundError:
     print("File is not found")
+except ValueError:
+    print("Syntax Error Occured")
