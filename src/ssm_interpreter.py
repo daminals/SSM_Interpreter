@@ -166,7 +166,6 @@ try:
             line = file_list[line_num].strip().split(' ')
             # print(line)
             checker = -1
-            print(line_num)
             print(line)
             for instruction in line:
                 checker += 1
