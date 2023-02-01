@@ -162,12 +162,12 @@ try:
         # interpret asm
         line_num = 0
         while line_num != len(file_list):  # go until program completion
+            print(ssm.stack)
             line = file_list[line_num].strip().split(' ')
             # print(line)
             checker = -1
             print(line)
             for instruction in line:
-                print(instruction)
                 checker += 1
                 if instruction == "#":
                     break
