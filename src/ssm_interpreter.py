@@ -145,8 +145,11 @@ try:
         for i in range(len(file)):
             line = file[i].split()
             if re.match(r'.+:$', line[0]):
+                new_label = line[0].replace(':', '')
+                if new_label in ssm.label:
+                    raise ValueError
                 # print("Detected Label")
-                ssm.addLabel(line[0].replace(':', ''), i)
+                ssm.addLabel(new_label, i)
     with open(path, 'r') as file:
         file_list = list(file)
         numberOperand = False
