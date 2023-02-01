@@ -147,7 +147,7 @@ try:
             if re.match(r'.+:$', line[0]):
                 new_label = line[0].replace(':', '')
                 if new_label in ssm.label:
-                    raise ValueError
+                    raise ValueError # no dup labels
                 # print("Detected Label")
                 ssm.addLabel(new_label, i)
     with open(path, 'r') as file:
