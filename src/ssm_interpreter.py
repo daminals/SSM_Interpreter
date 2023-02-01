@@ -165,12 +165,12 @@ try:
         # interpret asm
         line_num = 0
         while line_num != len(file_list):  # go until program completion
-            print(ssm.stack)
+            # print(ssm.stack)
             line = file_list[line_num].strip().split(' ')
-            # print(line)
-            checker = -1
-            print(line_num)
             print(line)
+            checker = -1
+            # print(line_num)
+            # print(line)
             for instruction in line:
                 checker += 1
                 if instruction == "#":
@@ -221,7 +221,7 @@ try:
                         print("damn")
                         raise ValueError
             line_num += 1
-        print(ssm.stack)
+            print(ssm.stack)
 except FileNotFoundError:
     print("File is not found")
 except ValueError:
