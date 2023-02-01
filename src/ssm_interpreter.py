@@ -162,59 +162,57 @@ try:
         # interpret asm
         line_num = 0
         while line_num != len(file_list):  # go until program completion
-            try:
-                line = file_list[line_num].strip().split(' ')
-                # print(line)
-                checker = -1
-                for instruction in line:
-                    checker += 1
-                    if instruction == "#":
-                        break
-                    # print(instruction+ ":",checker)
-                    if checker == 0 and re.search(r'.+:$', instruction): # first instruction
-                        if (numberOperand == True or labelOperand == True):
-                            raise ValueError
-                    if instruction in token:
-                        if (numberOperand == True or labelOperand == True):
-                            raise ValueError
-                        if instruction == "ildc":
-                            numberOperand = True
-                            if (not re.match(numberPattern, line[checker+1])):
-                                # if operand is invalid, exit
-                                raise ValueError  # should be throw
-                        # Jumping Instructions
-                        elif instruction == "jz":
-                            labelOperand = True
-                            labelBoolean = ssm.Jz()
-                        elif instruction == "jnz":
-                            labelOperand = True
-                            labelBoolean = ssm.Jnz()
-                        elif instruction == "jmp":
-                            labelOperand = True
-                            labelBoolean = True # we want it to jump no matter what if jmp
-                        # Regular Instructions
-                        elif instruction in ssm.instruction_dict:
-                            ssm.processInstruction(instruction)
-                    else:
-                        if numberOperand:
-                            if (re.match(numberPattern, line[checker])):
-                                number = int(line[checker])
-                                ssm.Ildc(number)
-                                numberOperand = False
-                            else:
-                                raise ValueError
-                        elif labelOperand:
-                            if labelBoolean:
-                                line_num = ssm.Jmp(instruction)
-                                labelBoolean = False
-                            labelOperand = False
+            line = file_list[line_num].strip().split(' ')
+            # print(line)
+            checker = -1
+            print(line)
+            for instruction in line:
+                print(instruction)
+                checker += 1
+                if instruction == "#":
+                    break
+                # print(instruction+ ":",checker)
+                if checker == 0 and re.search(r'.+:$', instruction): # first instruction
+                    if (numberOperand == True or labelOperand == True):
+                        raise ValueError
+                if instruction in token:
+                    if (numberOperand == True or labelOperand == True):
+                        raise ValueError
+                    if instruction == "ildc":
+                        numberOperand = True
+                        if (not re.match(numberPattern, line[checker+1])):
+                            # if operand is invalid, exit
+                            raise ValueError  # should be throw
+                    # Jumping Instructions
+                    elif instruction == "jz":
+                        labelOperand = True
+                        labelBoolean = ssm.Jz()
+                    elif instruction == "jnz":
+                        labelOperand = True
+                        labelBoolean = ssm.Jnz()
+                    elif instruction == "jmp":
+                        labelOperand = True
+                        labelBoolean = True # we want it to jump no matter what if jmp
+                    # Regular Instructions
+                    elif instruction in ssm.instruction_dict:
+                        ssm.processInstruction(instruction)
+                else:
+                    if numberOperand:
+                        if (re.match(numberPattern, line[checker])):
+                            number = int(line[checker])
+                            ssm.Ildc(number)
+                            numberOperand = False
                         else:
                             raise ValueError
-                line_num += 1
-                print(ssm.stack[-1])
-            except Exception as e:
-                print(e)
-                break
+                    elif labelOperand:
+                        if labelBoolean:
+                            line_num = ssm.Jmp(instruction)
+                            labelBoolean = False
+                        labelOperand = False
+                    else:
+                        raise ValueError
+            line_num += 1
+        print(ssm.stack)
 except FileNotFoundError:
     print("File is not found")
 except ValueError:
