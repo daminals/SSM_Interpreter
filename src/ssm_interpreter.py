@@ -127,6 +127,7 @@ class Ssm:
         if not label in self.label:
             raise LookupError
         else:
+            print(self.label[label])
             return self.label[label]
 
     def addLabel(self, label, lineNumber):
@@ -157,7 +158,7 @@ try:
           for instruction in line:
               if re.search(r'.+:$', instruction):
                 # if label detected, add label to ssm.label 
-                ssm.addLabel(instruction[:-1], line_num)
+                ssm.addLabel(instruction[:-1], line_num - 1)
         # interpret asm
         line_num = 0
         while line_num != len(file_list):  # go until program completion
@@ -165,6 +166,7 @@ try:
             line = file_list[line_num].strip().split(' ')
             # print(line)
             checker = -1
+            print(line_num)
             print(line)
             for instruction in line:
                 checker += 1
