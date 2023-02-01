@@ -1,6 +1,10 @@
 # Jason Zhang
 # Daniel Kogan 114439349
 # note need change all print error msg below into an throw for error handling later on
+# TODO: HANDLE COMMENTS
+# TODO: HANDLE COLON(:) -> NEW LINE
+# TODO: INVESTIGATE TEST2 - LIST INDEX OUT OF RANGE
+# TODO: ERROR HANDLING
 
 import re
 import sys
@@ -153,7 +157,7 @@ try:
           line = file_list[line_num].strip().split(' ')
           for instruction in line:
               if re.search(r'.+:$', instruction):
-                # print("Detected Label")
+                # if label detected, add label to ssm.label 
                 ssm.addLabel(instruction[:-1], line_num)
         # interpret asm
         line_num = 0
@@ -188,7 +192,6 @@ try:
                         elif instruction == "jmp":
                             labelOperand = True
                             labelBoolean = True # we want it to jump no matter what if jmp
-
                         # Regular Instructions
                         elif instruction in ssm.instruction_dict:
                             ssm.processInstruction(instruction)
