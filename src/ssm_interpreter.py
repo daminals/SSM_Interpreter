@@ -127,7 +127,6 @@ class Ssm:
         if not label in self.label:
             raise LookupError
         else:
-            print(self.label[label])
             return self.label[label]
 
     def addLabel(self, label, lineNumber):
@@ -147,8 +146,7 @@ try:
             if re.match(r'.+:$', line[0]):
                 new_label = line[0].replace(':', '')
                 if new_label in ssm.label:
-                    raise ValueError
-                # print("Detected Label")
+                    raise ValueError # no dup labels
                 ssm.addLabel(new_label, i)
     with open(path, 'r') as file:
         file_list = list(file)
@@ -165,29 +163,23 @@ try:
         # interpret asm
         line_num = 0
         while line_num != len(file_list):  # go until program completion
-            print(ssm.stack)
             line = file_list[line_num].strip().split(' ')
-            # print(line)
             checker = -1
-            print(line)
+            checker = -1
             for instruction in line:
                 checker += 1
                 if instruction == "#":
                     break
-                # print(instruction+ ":",checker)
                 if checker == 0 and re.search(r'.+:$', instruction): # first instruction
                     if (numberOperand == True or labelOperand == True):
-                        print("1")
                         raise ValueError
                 elif instruction in token:
                     if (numberOperand == True or labelOperand == True):
-                        print("2")
                         raise ValueError
                     if instruction == "ildc":
                         numberOperand = True
                         if (not re.match(numberPattern, line[checker+1])):
                             # if operand is invalid, exit
-                            print("3")
                             raise ValueError  # should be throw
                     # Jumping Instructions
                     elif instruction == "jz":
@@ -205,11 +197,10 @@ try:
                 else:
                     if numberOperand:
                         if (re.match(numberPattern, line[checker])):
-                            number = int(line[checker])
+                            number = float(line[checker])
                             ssm.Ildc(number)
                             numberOperand = False
                         else:
-                            print("4")
                             raise ValueError
                     elif labelOperand:
                         if labelBoolean:
@@ -217,10 +208,9 @@ try:
                             labelBoolean = False
                         labelOperand = False
                     else:
-                        print("damn")
                         raise ValueError
             line_num += 1
-        print(ssm.stack)
+            #print(ssm.stack)
 except FileNotFoundError:
     print("File is not found")
 except ValueError:
@@ -229,3 +219,8 @@ except LookupError:
     print("Stack is empty or the label dosent exist")
 except ArithmeticError:
     print("Not enough values in the stack to perform the operation")
+topstack = ssm.stack[-1]
+if (int(topstack) == topstack):
+        print(int(topstack))
+else:
+    print(topstack)
