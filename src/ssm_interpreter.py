@@ -1,10 +1,6 @@
 # Jason Zhang
 # Daniel Kogan 114439349
 # note need change all print error msg below into an throw for error handling later on
-# TODO: HANDLE COMMENTS
-# TODO: HANDLE COLON(:) -> NEW LINE
-# TODO: INVESTIGATE TEST2 - LIST INDEX OUT OF RANGE
-# TODO: ERROR HANDLING
 
 import re
 import sys
@@ -138,16 +134,23 @@ class Ssm:
 
 ssm = Ssm()
 try:
-    #scanning for label
+    # scanning for label
     with open(path, 'r') as file:
         file = list(file)
         for i in range(len(file)):
             line = file[i].split()
+            print(line)
             if re.match(r'.+:$', line[0]):
                 new_label = line[0].replace(':', '')
                 if new_label in ssm.label:
                     raise ValueError # no dup labels
-                ssm.addLabel(new_label, i)
+                print(line[1].split(' ')[0].strip())
+                print(file[i+1].strip().split(' ')[0])
+                if (line[1].split(' ')[0].strip() in token) or (file[i+1].strip().split(' ')[0] in token):
+                    ssm.addLabel(new_label, i)
+                else:
+                  raise ValueError
+                # ssm.addLabel(new_label, i)
     with open(path, 'r') as file:
         file_list = list(file)
         numberOperand = False
@@ -165,7 +168,7 @@ try:
         while line_num != len(file_list):  # go until program completion
             line = file_list[line_num].strip().split(' ')
             checker = -1
-            checker = -1
+            # checker = -1
             for instruction in line:
                 checker += 1
                 if instruction == "#":
@@ -210,7 +213,7 @@ try:
                     else:
                         raise ValueError
             line_num += 1
-            #print(ssm.stack)
+            # print(ssm.stack)
     topstack = ssm.stack[-1]
     if (int(topstack) == topstack):
             print(int(topstack))
