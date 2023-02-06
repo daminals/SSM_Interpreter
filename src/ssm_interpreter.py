@@ -1,4 +1,4 @@
-# Jason Zhang
+# Jason Zhang jasozhang 112710259
 # Daniel Kogan dkogan 114439349
 # note need change all print error msg below into an throw for error handling later on
 
