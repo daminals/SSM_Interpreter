@@ -59,7 +59,7 @@ class Ssm:
         try:
             firstNumber = self.stack.pop()
             secondNumber = self.stack.pop()
-            self.stack.append(secondNumber / firstNumber)
+            self.stack.append(int(secondNumber / firstNumber))
         except:
             raise ArithmeticError
 
@@ -214,7 +214,7 @@ try:
                 else:
                     if numberOperand:
                         if (re.match(numberPattern, line[checker])):
-                            number = float(line[checker])
+                            number = int(line[checker])
                             ssm.Ildc(number)
                             numberOperand = False
                         else:
