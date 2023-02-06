@@ -117,7 +117,7 @@ class Ssm:
             cell = self.stack.pop()
             self.stack.append(self.storageCell[cell])
         except:
-            raise ArithmeticError
+            raise NameError
 
     def Jmp(self, label):
         if not label in self.label:
@@ -241,3 +241,5 @@ except LookupError as e:
     print("Stack is empty or the label dosent exist" )
 except ArithmeticError:
     print("Not enough values in the stack to perform the operation")
+except NameError():
+    print("Storage Cell is not found")
