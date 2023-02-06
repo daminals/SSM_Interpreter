@@ -211,6 +211,11 @@ try:
                         raise ValueError
             line_num += 1
             #print(ssm.stack)
+    topstack = ssm.stack[-1]
+    if (int(topstack) == topstack):
+            print(int(topstack))
+    else:
+        print(topstack)
 except FileNotFoundError:
     print("File is not found")
 except ValueError:
@@ -219,8 +224,3 @@ except LookupError:
     print("Stack is empty or the label dosent exist")
 except ArithmeticError:
     print("Not enough values in the stack to perform the operation")
-topstack = ssm.stack[-1]
-if (int(topstack) == topstack):
-        print(int(topstack))
-else:
-    print(topstack)
