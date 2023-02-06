@@ -126,27 +126,47 @@ class Ssm:
             return self.label[label]
 
     def addLabel(self, label, lineNumber):
-        self.label[label] = lineNumber
+        self.label[label] = lineNumber-1
 
     def processInstruction(self, instruction):
         return self.instruction_dict[instruction]()
+      
+    def checkLabelValidity(self, file, line, i):
+      # print("len:" +str (len(file_list)))
+      # print("i: "+str(i+1))
+      # print("line: "+str(line))
+      # print("file: "+str(file[i+1].strip().split(' ')[0]))
+      
+      if (len(line) > 1):
+        if line[1].split(' ')[0].strip() in token:
+          # print("truth")
+          return True
+      # if file i+1 does not cause index out of range
+
+      if len(file) == i:
+        return False
+      
+      # print("should not make it here")
+      if file[i+1].strip().split(' ')[0] in token:
+        return True
+
 
 
 ssm = Ssm()
 try:
-    # scanning for label
+    # scanning for labels
     with open(path, 'r') as file:
-        file = list(file)
-        for i in range(len(file)):
-            line = file[i].split()
-            print(line)
+        file_list = list(file)
+        for i in range(len(file_list)):
+            line = file_list[i].split()
+            # print(line)
             if re.match(r'.+:$', line[0]):
                 new_label = line[0].replace(':', '')
                 if new_label in ssm.label:
                     raise ValueError # no dup labels
-                print(line[1].split(' ')[0].strip())
-                print(file[i+1].strip().split(' ')[0])
-                if (line[1].split(' ')[0].strip() in token) or (file[i+1].strip().split(' ')[0] in token):
+                # print(line[1].split(' ')[0].strip())
+                # print(file_list[i+1].strip().split(' ')[0])
+                if (ssm.checkLabelValidity(file_list, line, i)):
                     ssm.addLabel(new_label, i)
                 else:
                   raise ValueError
@@ -156,22 +176,16 @@ try:
         numberOperand = False
         labelOperand = False
         labelBoolean = False
-        # go through and add all labels in program
-        for line_num in range(len(file_list)):
-          line = file_list[line_num].strip().split(' ')
-          for instruction in line:
-              if re.search(r'.+:$', instruction):
-                # if label detected, add label to ssm.label 
-                ssm.addLabel(instruction[:-1], line_num - 1)
         # interpret asm
         line_num = 0
         while line_num != len(file_list):  # go until program completion
             line = file_list[line_num].strip().split(' ')
             checker = -1
             # checker = -1
+            # print(line)
             for instruction in line:
                 checker += 1
-                if instruction == "#":
+                if instruction[0] == "#":
                     break
                 if checker == 0 and re.search(r'.+:$', instruction): # first instruction
                     if (numberOperand == True or labelOperand == True):
@@ -223,7 +237,7 @@ except FileNotFoundError:
     print("File is not found")
 except ValueError:
     print("Syntax Error Occured")
-except LookupError:
-    print("Stack is empty or the label dosent exist")
+except LookupError as e: 
+    print("Stack is empty or the label dosent exist" )
 except ArithmeticError:
     print("Not enough values in the stack to perform the operation")
