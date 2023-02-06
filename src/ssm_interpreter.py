@@ -228,11 +228,14 @@ try:
                         raise ValueError
             line_num += 1
             # print(ssm.stack)
-    topstack = ssm.stack[-1]
-    if (int(topstack) == topstack):
-            print(int(topstack))
-    else:
-        print(topstack)
+    if (ssm.stack == []):
+      print('\0')
+    else: 
+      topstack = ssm.stack[-1]
+      if (int(topstack) == topstack):
+              print(int(topstack))
+      else:
+          print(topstack)
 except FileNotFoundError:
     print("File is not found")
 except ValueError:
