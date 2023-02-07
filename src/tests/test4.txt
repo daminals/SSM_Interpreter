@@ -7,4 +7,3 @@ swap
 ildc 10
 isub 
 jz this_is_a_label
-ildc 5
