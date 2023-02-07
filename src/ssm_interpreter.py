@@ -149,8 +149,6 @@ class Ssm:
       if file[i+1].strip().split(' ')[0] in token:
         return True
 
-
-
 def compiler(path):
   ssm = Ssm()
   try:
@@ -232,13 +230,8 @@ def compiler(path):
         print('\0')
         return '\0'
       else: 
-        topstack = ssm.stack[-1]
-        if (int(topstack) == topstack):
-                print(int(topstack))
-                return int(topstack)
-        else:
-            print(topstack)
-            return topstack
+        print(ssm.stack[-1])
+        return ssm.stack[-1]
   except FileNotFoundError:
       print("File is not found")
       return FileNotFoundError
@@ -254,7 +247,8 @@ def compiler(path):
   except NameError():
       print("Storage Cell is not found")
       return NameError
-      
+
+
 if __name__ == "__main__":
   path = sys.argv[1]
   compiler(path)
