@@ -27,6 +27,8 @@ class TestSSMFiles(unittest.TestCase):
 
     def test_9(self):
       self.assertEqual(ValueError, ssm_interpreter.compiler("test9.txt"))
+    def test_10(self):
+      self.assertEqual(50, ssm_interpreter.compiler("test10.txt"))
 
 
 
