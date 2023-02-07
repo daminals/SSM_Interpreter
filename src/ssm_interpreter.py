@@ -231,11 +231,7 @@ try:
     if (ssm.stack == []):
       print('\0')
     else: 
-      topstack = ssm.stack[-1]
-      if (int(topstack) == topstack):
-              print(int(topstack))
-      else:
-          print(topstack)
+      print(ssm.stack[-1])
 except FileNotFoundError:
     print("File is not found")
 except ValueError:
