@@ -244,7 +244,7 @@ def compiler(path):
   except ArithmeticError:
       print("Not enough values in the stack to perform the operation")
       return ArithmeticError
-  except NameError():
+  except NameError:
       print("Storage Cell is not found")
       return NameError
 
