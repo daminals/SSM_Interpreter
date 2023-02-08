@@ -4,11 +4,6 @@ import unittest, sys, os
 # sys.path.insert(0, top_level_dir)
 from src import ssm_interpreter
 
-current_directory = os.getcwd()
-files_in_directory = os.listdir(current_directory)
-print(files_in_directory)
-
-
 class TestSSMFiles(unittest.TestCase):
     def test_0(self):
       self.assertEqual(FileNotFoundError, ssm_interpreter.compiler("src/tests/test-1.asm"))
