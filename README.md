@@ -56,4 +56,4 @@ The SSM interpreter handles the following errors:
 
 ## Test Cases
 
-Test cases for this function are done using the unittest module in python, upon several SSM programs.
+Test cases for this function are done using the unittest module in python, upon several SSM programs. Code Coverage is measured using the coverage module, visible via the htmlcov/index.html

@@ -1,4 +1,4 @@
-name: Test
+name: Unit Tests and Code Coverage
 
 on: [push]
 
@@ -30,3 +30,5 @@ jobs:
       - name: Test with unittest
         run: |
           coverage run -m unittest src/test.py
+      - name: Generate Code Coverage
+        run: coverage report
