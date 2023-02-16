@@ -1,4 +1,4 @@
-![github repo badge: Language](https://img.shields.io/badge/Language-Python-181717?color=blue) ![github repo badge: Compiles](https://img.shields.io/badge/Compiles-SSM-181717?color=orange) 
+![github repo badge: Language](https://img.shields.io/badge/Language-Python-181717?color=blue) ![github repo badge: Compiles](https://img.shields.io/badge/Compiles-SSM-181717?color=orange) [![Test](https://github.com/daminals/SSM_Interpreter/actions/workflows/test.yaml/badge.svg)](https://github.com/daminals/SSM_Interpreter/actions/workflows/test.yaml)
 # SSM Interpreter
 
 A simple stack machine-based assembly language (SSM) interpreter implementation in Python, which can interpret and execute a file containing SSM instructions.
