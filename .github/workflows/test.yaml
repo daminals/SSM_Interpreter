@@ -29,6 +29,6 @@ jobs:
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Test with unittest
         run: |
-          coverage run -m unittest src/test.py
-      - name: Generate Code Coverage
-        run: coverage report
+          coverage run -m unittest -q src/test.py
+      - name: Test Code Coverage
+        run: coverage report --fail-under=80
